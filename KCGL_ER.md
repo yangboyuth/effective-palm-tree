@@ -1,4 +1,4 @@
-# KCGL 数据库 ER 图 & 表关系说明
+# KCGL 数据库 ER 图 & 表关系说明（中文版）
 
 ---
 
@@ -6,29 +6,29 @@
 
 ```mermaid
 erDiagram
-    Departments ||--o{ Employees : "部门拥有员工"
-    Employees ||--o{ EmployeeRoles : "员工拥有角色"
-    Roles ||--o{ EmployeeRoles : "角色被赋予"
+    "部门表" ||--o{ "员工表" : "部门拥有员工"
+    "员工表" ||--o{ "员工角色表" : "员工拥有角色"
+    "角色表" ||--o{ "员工角色表" : "角色被赋予"
 
-    Departments {
-        int DeptId PK
-        varchar DeptName
-        int ManagerId FK
+    "部门表" {
+        int 部门编号 PK
+        varchar 部门名称
+        int 经理编号 FK
     }
-    Employees {
-        int EmpId PK
-        int DeptId FK
-        varchar EmpNo
-        varchar EmpName
+    "员工表" {
+        int 员工编号 PK
+        int 部门编号 FK
+        varchar 工号
+        varchar 姓名
     }
-    Roles {
-        int RoleId PK
-        varchar RoleName
+    "角色表" {
+        int 角色编号 PK
+        varchar 角色名称
     }
-    EmployeeRoles {
-        int EmpRoleId PK
-        int EmpId FK
-        int RoleId FK
+    "员工角色表" {
+        int 编号 PK
+        int 员工编号 FK
+        int 角色编号 FK
     }
 ```
 
@@ -38,38 +38,38 @@ erDiagram
 
 ```mermaid
 erDiagram
-    Categories ||--o{ Products : "分类包含产品"
-    Suppliers ||--o{ Products : "供应商提供产品"
-    Products ||--o{ ProductSpecs : "产品有规格"
-    Products ||--o{ ProductImages : "产品有图片"
-    Categories ||--o{ Categories : "父分类包含子分类"
+    "分类表" ||--o{ "产品表" : "分类包含产品"
+    "供应商表" ||--o{ "产品表" : "供应商提供产品"
+    "产品表" ||--o{ "产品规格表" : "产品有规格"
+    "产品表" ||--o{ "产品图片表" : "产品有图片"
+    "分类表" ||--o{ "分类表" : "父分类包含子分类"
 
-    Categories {
-        int CategoryId PK
-        int ParentId FK
-        varchar CategoryName
+    "分类表" {
+        int 分类编号 PK
+        int 父分类编号 FK
+        varchar 分类名称
     }
-    Suppliers {
-        int SupplierId PK
-        varchar CompanyName
-        varchar ContactName
+    "供应商表" {
+        int 供应商编号 PK
+        varchar 公司名称
+        varchar 联系人
     }
-    Products {
-        int ProductId PK
-        int CategoryId FK
-        int SupplierId FK
-        varchar ProductName
-        decimal UnitPrice
+    "产品表" {
+        int 产品编号 PK
+        int 分类编号 FK
+        int 供应商编号 FK
+        varchar 产品名称
+        decimal 售价
     }
-    ProductSpecs {
-        int SpecId PK
-        int ProductId FK
-        varchar SpecName
+    "产品规格表" {
+        int 规格编号 PK
+        int 产品编号 FK
+        varchar 规格名称
     }
-    ProductImages {
-        int ImageId PK
-        int ProductId FK
-        varchar ImageUrl
+    "产品图片表" {
+        int 图片编号 PK
+        int 产品编号 FK
+        varchar 图片地址
     }
 ```
 
@@ -79,31 +79,31 @@ erDiagram
 
 ```mermaid
 erDiagram
-    Warehouses ||--o{ Inventory : "仓库有库存"
-    Products ||--o{ Inventory : "产品有库存记录"
-    Products ||--o{ StockTransactions : "产品有出入库流水"
-    Warehouses ||--o{ StockTransactions : "仓库有出入库流水"
-    Orders ||--o{ StockTransactions : "订单触发库存变动"
-    PurchaseOrders ||--o{ StockTransactions : "采购单触发入库"
+    "仓库表" ||--o{ "库存表" : "仓库有库存"
+    "产品表" ||--o{ "库存表" : "产品有库存记录"
+    "产品表" ||--o{ "库存流水表" : "产品有出入库流水"
+    "仓库表" ||--o{ "库存流水表" : "仓库有出入库流水"
+    "订单表" ||--o{ "库存流水表" : "订单触发库存变动"
+    "采购订单表" ||--o{ "库存流水表" : "采购单触发入库"
 
-    Warehouses {
-        int WarehouseId PK
-        varchar WarehouseNo
-        varchar WarehouseName
+    "仓库表" {
+        int 仓库编号 PK
+        varchar 仓库编码
+        varchar 仓库名称
     }
-    Inventory {
-        int InventoryId PK
-        int ProductId FK
-        int WarehouseId FK
-        int Quantity
+    "库存表" {
+        int 库存编号 PK
+        int 产品编号 FK
+        int 仓库编号 FK
+        int 当前数量
     }
-    StockTransactions {
-        int TransId PK
-        int ProductId FK
-        int WarehouseId FK
-        char TransType
-        int Quantity
-        int Balance
+    "库存流水表" {
+        int 流水编号 PK
+        int 产品编号 FK
+        int 仓库编号 FK
+        char 类型
+        int 数量
+        int 结余
     }
 ```
 
@@ -113,29 +113,29 @@ erDiagram
 
 ```mermaid
 erDiagram
-    Customers ||--o{ CustomerAddresses : "客户有收货地址"
-    Customers ||--o{ ShoppingCart : "客户有购物车"
-    Products ||--o{ ShoppingCart : "商品被加入购物车"
-    ProductSpecs ||--o{ ShoppingCart : "规格被选择"
+    "客户表" ||--o{ "客户地址表" : "客户有收货地址"
+    "客户表" ||--o{ "购物车表" : "客户有购物车"
+    "产品表" ||--o{ "购物车表" : "商品被加入购物车"
+    "产品规格表" ||--o{ "购物车表" : "规格被选择"
 
-    Customers {
-        int CustomerId PK
-        varchar Username
-        varchar FullName
+    "客户表" {
+        int 客户编号 PK
+        varchar 用户名
+        varchar 真实姓名
     }
-    CustomerAddresses {
-        int AddressId PK
-        int CustomerId FK
-        varchar Receiver
-        varchar DetailAddress
+    "客户地址表" {
+        int 地址编号 PK
+        int 客户编号 FK
+        varchar 收件人
+        varchar 详细地址
     }
-    ShoppingCart {
-        int CartId PK
-        int CustomerId FK
-        int ProductId FK
-        int SpecId FK
-        int Quantity
-        tinyint IsSelected
+    "购物车表" {
+        int 购物车编号 PK
+        int 用户编号 FK
+        int 商品编号 FK
+        int 规格编号 FK
+        int 购买数量
+        tinyint 是否选中
     }
 ```
 
@@ -145,50 +145,50 @@ erDiagram
 
 ```mermaid
 erDiagram
-    Customers ||--o{ Orders : "客户下单"
-    Employees ||--o{ Orders : "员工处理订单"
-    Orders ||--o{ OrderItems : "订单包含商品明细"
-    Products ||--o{ OrderItems : "产品被订购"
-    ProductSpecs ||--o{ OrderItems : "规格被订购"
-    Orders ||--o{ Payments : "订单有支付记录"
-    Orders ||--o{ Shipments : "订单有物流发货"
-    Warehouses ||--o{ Shipments : "仓库发货"
-    Orders ||--o{ Returns : "订单有退货"
-    OrderItems ||--o{ Returns : "明细被退货"
+    "客户表" ||--o{ "订单表" : "客户下单"
+    "员工表" ||--o{ "订单表" : "员工处理订单"
+    "订单表" ||--o{ "订单明细表" : "订单包含商品明细"
+    "产品表" ||--o{ "订单明细表" : "产品被订购"
+    "产品规格表" ||--o{ "订单明细表" : "规格被订购"
+    "订单表" ||--o{ "支付记录表" : "订单有支付记录"
+    "订单表" ||--o{ "物流发货表" : "订单有物流发货"
+    "仓库表" ||--o{ "物流发货表" : "仓库发货"
+    "订单表" ||--o{ "退货表" : "订单有退货"
+    "订单明细表" ||--o{ "退货表" : "明细被退货"
 
-    Orders {
-        int OrderId PK
-        varchar OrderNo
-        int CustomerId FK
-        int EmpId FK
-        decimal TotalAmount
-        tinyint ConfirmFlag
+    "订单表" {
+        int 订单编号 PK
+        varchar 订单号
+        int 客户编号 FK
+        int 员工编号 FK
+        decimal 订购总额
+        tinyint 确认标志
     }
-    OrderItems {
-        int OrderItemId PK
-        int OrderId FK
-        int ProductId FK
-        int SpecId FK
-        int Quantity
+    "订单明细表" {
+        int 明细编号 PK
+        int 订单编号 FK
+        int 产品编号 FK
+        int 规格编号 FK
+        int 数量
     }
-    Payments {
-        int PaymentId PK
-        int OrderId FK
-        decimal Amount
-        varchar PaymentMethod
+    "支付记录表" {
+        int 支付编号 PK
+        int 订单编号 FK
+        decimal 支付金额
+        varchar 支付方式
     }
-    Shipments {
-        int ShipmentId PK
-        int OrderId FK
-        varchar ShipmentNo
-        int WarehouseId FK
+    "物流发货表" {
+        int 发货编号 PK
+        int 订单编号 FK
+        varchar 物流单号
+        int 仓库编号 FK
     }
-    Returns {
-        int ReturnId PK
-        int OrderId FK
-        int OrderItemId FK
-        int ProductId FK
-        int SpecId FK
+    "退货表" {
+        int 退货编号 PK
+        int 订单编号 FK
+        int 订单明细编号 FK
+        int 产品编号 FK
+        int 规格编号 FK
     }
 ```
 
@@ -198,29 +198,29 @@ erDiagram
 
 ```mermaid
 erDiagram
-    Suppliers ||--o{ PurchaseOrders : "供应商的采购单"
-    Warehouses ||--o{ PurchaseOrders : "采购入指定仓库"
-    Employees ||--o{ PurchaseOrders : "采购员负责"
-    PurchaseOrders ||--o{ PurchaseOrderItems : "采购单包含明细"
-    Products ||--o{ PurchaseOrderItems : "产品被采购"
-    ProductSpecs ||--o{ PurchaseOrderItems : "规格被采购"
+    "供应商表" ||--o{ "采购订单表" : "供应商的采购单"
+    "仓库表" ||--o{ "采购订单表" : "采购入指定仓库"
+    "员工表" ||--o{ "采购订单表" : "采购员负责"
+    "采购订单表" ||--o{ "采购订单明细表" : "采购单包含明细"
+    "产品表" ||--o{ "采购订单明细表" : "产品被采购"
+    "产品规格表" ||--o{ "采购订单明细表" : "规格被采购"
 
-    PurchaseOrders {
-        int POId PK
-        varchar PONo
-        int SupplierId FK
-        int WarehouseId FK
-        int EmpId FK
-        decimal TotalAmount
-        varchar Status
+    "采购订单表" {
+        int 采购单编号 PK
+        varchar 采购单号
+        int 供应商编号 FK
+        int 仓库编号 FK
+        int 采购员编号 FK
+        decimal 采购总额
+        varchar 状态
     }
-    PurchaseOrderItems {
-        int POItemId PK
-        int POId FK
-        int ProductId FK
-        int SpecId FK
-        int Quantity
-        decimal UnitPrice
+    "采购订单明细表" {
+        int 明细编号 PK
+        int 采购单编号 FK
+        int 产品编号 FK
+        int 规格编号 FK
+        int 采购数量
+        decimal 单价
     }
 ```
 
@@ -230,14 +230,14 @@ erDiagram
 
 ```mermaid
 erDiagram
-    OperationLogs {
-        int LogId PK
-        varchar OperatorType
-        int OperatorId
-        varchar LogType
-        varchar TableName
-        int RecordId
-        longtext Detail
+    "操作日志表" {
+        int 日志编号 PK
+        varchar 操作者类型
+        int 操作者编号
+        varchar 操作类型
+        varchar 操作表名
+        int 记录编号
+        longtext 操作详情
     }
 ```
 
@@ -247,55 +247,55 @@ erDiagram
 
 ```mermaid
 erDiagram
-    Departments ||--o{ Employees : "部门-员工"
-    Departments ||--o{ Departments : "自引用"
+    "部门表" ||--o{ "员工表" : "部门-员工"
+    "部门表" ||--o{ "部门表" : "自引用"
 
-    Employees ||--o{ EmployeeRoles : "员工-角色"
-    Roles ||--o{ EmployeeRoles : ""
-    Employees ||--o{ Warehouses : "员工-仓库管理"
-    Employees ||--o{ Orders : "员工-订单处理"
-    Employees ||--o{ StockTransactions : "员工-操作库存"
-    Employees ||--o{ PurchaseOrders : "员工-采购"
+    "员工表" ||--o{ "员工角色表" : "员工-角色"
+    "角色表" ||--o{ "员工角色表" : ""
+    "员工表" ||--o{ "仓库表" : "员工-仓库管理"
+    "员工表" ||--o{ "订单表" : "员工-订单处理"
+    "员工表" ||--o{ "库存流水表" : "员工-操作库存"
+    "员工表" ||--o{ "采购订单表" : "员工-采购"
 
-    Categories ||--o{ Products : "分类-产品"
-    Categories ||--o{ Categories : "自引用"
-    Suppliers ||--o{ Products : "供应商-产品"
-    Suppliers ||--o{ PurchaseOrders : "供应商-采购"
+    "分类表" ||--o{ "产品表" : "分类-产品"
+    "分类表" ||--o{ "分类表" : "自引用"
+    "供应商表" ||--o{ "产品表" : "供应商-产品"
+    "供应商表" ||--o{ "采购订单表" : "供应商-采购"
 
-    Products ||--o{ ProductSpecs : "产品-规格"
-    Products ||--o{ ProductImages : "产品-图片"
-    Products ||--o{ Inventory : "产品-库存"
-    Products ||--o{ OrderItems : "产品-订单明细"
-    Products ||--o{ ShoppingCart : "产品-购物车"
-    Products ||--o{ StockTransactions : "产品-流水"
-    Products ||--o{ PurchaseOrderItems : "产品-采购明细"
-    Products ||--o{ Returns : "产品-退货"
-    ProductSpecs ||--o{ OrderItems : "规格-订单明细"
-    ProductSpecs ||--o{ ShoppingCart : "规格-购物车"
-    ProductSpecs ||--o{ PurchaseOrderItems : "规格-采购明细"
-    ProductSpecs ||--o{ Returns : "规格-退货"
+    "产品表" ||--o{ "产品规格表" : "产品-规格"
+    "产品表" ||--o{ "产品图片表" : "产品-图片"
+    "产品表" ||--o{ "库存表" : "产品-库存"
+    "产品表" ||--o{ "订单明细表" : "产品-订单明细"
+    "产品表" ||--o{ "购物车表" : "产品-购物车"
+    "产品表" ||--o{ "库存流水表" : "产品-流水"
+    "产品表" ||--o{ "采购订单明细表" : "产品-采购明细"
+    "产品表" ||--o{ "退货表" : "产品-退货"
+    "产品规格表" ||--o{ "订单明细表" : "规格-订单明细"
+    "产品规格表" ||--o{ "购物车表" : "规格-购物车"
+    "产品规格表" ||--o{ "采购订单明细表" : "规格-采购明细"
+    "产品规格表" ||--o{ "退货表" : "规格-退货"
 
-    Warehouses ||--o{ Inventory : "仓库-库存"
-    Warehouses ||--o{ StockTransactions : "仓库-流水"
-    Warehouses ||--o{ Shipments : "仓库-发货"
-    Warehouses ||--o{ PurchaseOrders : "仓库-采购入库"
+    "仓库表" ||--o{ "库存表" : "仓库-库存"
+    "仓库表" ||--o{ "库存流水表" : "仓库-流水"
+    "仓库表" ||--o{ "物流发货表" : "仓库-发货"
+    "仓库表" ||--o{ "采购订单表" : "仓库-采购入库"
 
-    Inventory ||--o{ StockTransactions : "库存变动记录"
+    "库存表" ||--o{ "库存流水表" : "库存变动记录"
 
-    Customers ||--o{ CustomerAddresses : "客户-地址"
-    Customers ||--o{ ShoppingCart : "客户-购物车"
-    Customers ||--o{ Orders : "客户-订单"
+    "客户表" ||--o{ "客户地址表" : "客户-地址"
+    "客户表" ||--o{ "购物车表" : "客户-购物车"
+    "客户表" ||--o{ "订单表" : "客户-订单"
 
-    Orders ||--o{ OrderItems : "订单-明细"
-    Orders ||--o{ Payments : "订单-支付"
-    Orders ||--o{ Shipments : "订单-发货"
-    Orders ||--o{ Returns : "订单-退货"
-    Orders ||--o{ StockTransactions : "订单-库存流水"
+    "订单表" ||--o{ "订单明细表" : "订单-明细"
+    "订单表" ||--o{ "支付记录表" : "订单-支付"
+    "订单表" ||--o{ "物流发货表" : "订单-发货"
+    "订单表" ||--o{ "退货表" : "订单-退货"
+    "订单表" ||--o{ "库存流水表" : "订单-库存流水"
 
-    OrderItems ||--o{ Returns : "明细-退货"
+    "订单明细表" ||--o{ "退货表" : "明细-退货"
 
-    PurchaseOrders ||--o{ PurchaseOrderItems : "采购单-明细"
-    PurchaseOrders ||--o{ StockTransactions : "采购单-入库流水"
+    "采购订单表" ||--o{ "采购订单明细表" : "采购单-明细"
+    "采购订单表" ||--o{ "库存流水表" : "采购单-入库流水"
 ```
 
 ---
@@ -306,96 +306,96 @@ erDiagram
 
 | 主表 | 字段 | 方向 | 从表 | 字段 | 关系 | 语义 |
 |------|------|:----:|------|------|:----:|------|
-| Departments | DeptId | → | Employees | DeptId | **1:N** | 一个部门有多个员工 |
-| Departments | ManagerId | → | Employees | EmpId | **1:1** | 一个员工担任部门经理 |
-| Employees | EmpId | → | EmployeeRoles | EmpId | **1:N** | 一个员工拥有多个角色 |
-| Roles | RoleId | → | EmployeeRoles | RoleId | **1:N** | 一个角色被授予多个员工 |
+| 部门表 | 部门编号 | → | 员工表 | 部门编号 | **1:N** | 一个部门有多个员工 |
+| 部门表 | 经理编号 | → | 员工表 | 员工编号 | **1:1** | 一个员工担任部门经理 |
+| 员工表 | 员工编号 | → | 员工角色表 | 员工编号 | **1:N** | 一个员工拥有多个角色 |
+| 角色表 | 角色编号 | → | 员工角色表 | 角色编号 | **1:N** | 一个角色被授予多个员工 |
 
 ### 产品管理模块
 
 | 主表 | 字段 | 方向 | 从表 | 字段 | 关系 | 语义 |
 |------|------|:----:|------|------|:----:|------|
-| Categories | CategoryId | → | Products | CategoryId | **1:N** | 一个分类下有多个产品 |
-| Suppliers | SupplierId | → | Products | SupplierId | **1:N** | 一个供应商提供多个产品 |
-| Categories | ParentId | → | Categories | CategoryId | **1:N** | 分类自引用（树形层级） |
-| Products | ProductId | → | ProductSpecs | ProductId | **1:N** | 一个产品有多个规格 |
-| Products | ProductId | → | ProductImages | ProductId | **1:N** | 一个产品有多张图片 |
+| 分类表 | 分类编号 | → | 产品表 | 分类编号 | **1:N** | 一个分类下有多个产品 |
+| 供应商表 | 供应商编号 | → | 产品表 | 供应商编号 | **1:N** | 一个供应商提供多个产品 |
+| 分类表 | 父分类编号 | → | 分类表 | 分类编号 | **1:N** | 分类自引用（树形层级） |
+| 产品表 | 产品编号 | → | 产品规格表 | 产品编号 | **1:N** | 一个产品有多个规格 |
+| 产品表 | 产品编号 | → | 产品图片表 | 产品编号 | **1:N** | 一个产品有多张图片 |
 
 ### 仓储库存模块
 
 | 主表 | 字段 | 方向 | 从表 | 字段 | 关系 | 语义 |
 |------|------|:----:|------|------|:----:|------|
-| Products | ProductId | → | Inventory | ProductId | **1:N** | 一个产品在多个仓库有库存 |
-| Warehouses | WarehouseId | → | Inventory | WarehouseId | **1:N** | 一个仓库有多个产品库存 |
-| Products | ProductId | → | StockTransactions | ProductId | **1:N** | 一个产品有多次库存变动 |
-| Warehouses | WarehouseId | → | StockTransactions | WarehouseId | **1:N** | 一个仓库有多次库存变动 |
-| Orders | OrderId | → | StockTransactions | RefOrderId | **1:N** | 一个订单触发多次库存变动 |
-| PurchaseOrders | POId | → | StockTransactions | RefPOId | **1:N** | 一张采购单触发多次入库 |
-| Employees | EmpId | → | StockTransactions | OperatorId | **1:N** | 一个员工操作多次库存 |
+| 产品表 | 产品编号 | → | 库存表 | 产品编号 | **1:N** | 一个产品在多个仓库有库存 |
+| 仓库表 | 仓库编号 | → | 库存表 | 仓库编号 | **1:N** | 一个仓库有多个产品库存 |
+| 产品表 | 产品编号 | → | 库存流水表 | 产品编号 | **1:N** | 一个产品有多次库存变动 |
+| 仓库表 | 仓库编号 | → | 库存流水表 | 仓库编号 | **1:N** | 一个仓库有多次库存变动 |
+| 订单表 | 订单编号 | → | 库存流水表 | 关联订单编号 | **1:N** | 一个订单触发多次库存变动 |
+| 采购订单表 | 采购单编号 | → | 库存流水表 | 关联采购单编号 | **1:N** | 一张采购单触发多次入库 |
+| 员工表 | 员工编号 | → | 库存流水表 | 操作人编号 | **1:N** | 一个员工操作多次库存 |
 
 ### 客户购物模块
 
 | 主表 | 字段 | 方向 | 从表 | 字段 | 关系 | 语义 |
 |------|------|:----:|------|------|:----:|------|
-| Customers | CustomerId | → | CustomerAddresses | CustomerId | **1:N** | 一个客户有多个收货地址 |
-| Customers | CustomerId | → | ShoppingCart | CustomerId | **1:N** | 一个客户购物车有多条记录 |
-| Products | ProductId | → | ShoppingCart | ProductId | **1:N** | 一个产品被多个客户加入购物车 |
-| ProductSpecs | SpecId | → | ShoppingCart | SpecId | **1:N** | 一个规格被多次加入购物车 |
+| 客户表 | 客户编号 | → | 客户地址表 | 客户编号 | **1:N** | 一个客户有多个收货地址 |
+| 客户表 | 客户编号 | → | 购物车表 | 用户编号 | **1:N** | 一个客户购物车有多条记录 |
+| 产品表 | 产品编号 | → | 购物车表 | 商品编号 | **1:N** | 一个产品被多个客户加入购物车 |
+| 产品规格表 | 规格编号 | → | 购物车表 | 规格编号 | **1:N** | 一个规格被多次加入购物车 |
 
 ### 订单售后模块
 
 | 主表 | 字段 | 方向 | 从表 | 字段 | 关系 | 语义 |
 |------|------|:----:|------|------|:----:|------|
-| Customers | CustomerId | → | Orders | CustomerId | **1:N** | 一个客户有多个订单 |
-| Employees | EmpId | → | Orders | EmpId | **1:N** | 一个员工处理多个订单 |
-| Orders | OrderId | → | OrderItems | OrderId | **1:N** | 一个订单有多个明细 |
-| Products | ProductId | → | OrderItems | ProductId | **1:N** | 一个产品出现在多个订单明细中 |
-| ProductSpecs | SpecId | → | OrderItems | SpecId | **1:N** | 一个规格出现在多个订单明细中 |
-| Orders | OrderId | → | Payments | OrderId | **1:N** | 一个订单有多次支付记录 |
-| Orders | OrderId | → | Shipments | OrderId | **1:N** | 一个订单有多次发货 |
-| Warehouses | WarehouseId | → | Shipments | WarehouseId | **1:N** | 一个仓库发出多批货物 |
-| Orders | OrderId | → | Returns | OrderId | **1:N** | 一个订单有多次退货 |
-| OrderItems | OrderItemId | → | Returns | OrderItemId | **1:N** | 一个明细可能分多次退货 |
-| Products | ProductId | → | Returns | ProductId | **1:N** | 一个产品被多次退货 |
-| ProductSpecs | SpecId | → | Returns | SpecId | **1:N** | 一个规格被多次退货 |
+| 客户表 | 客户编号 | → | 订单表 | 客户编号 | **1:N** | 一个客户有多个订单 |
+| 员工表 | 员工编号 | → | 订单表 | 员工编号 | **1:N** | 一个员工处理多个订单 |
+| 订单表 | 订单编号 | → | 订单明细表 | 订单编号 | **1:N** | 一个订单有多个明细 |
+| 产品表 | 产品编号 | → | 订单明细表 | 产品编号 | **1:N** | 一个产品出现在多个订单明细中 |
+| 产品规格表 | 规格编号 | → | 订单明细表 | 规格编号 | **1:N** | 一个规格出现在多个订单明细中 |
+| 订单表 | 订单编号 | → | 支付记录表 | 订单编号 | **1:N** | 一个订单有多次支付记录 |
+| 订单表 | 订单编号 | → | 物流发货表 | 订单编号 | **1:N** | 一个订单有多次发货 |
+| 仓库表 | 仓库编号 | → | 物流发货表 | 仓库编号 | **1:N** | 一个仓库发出多批货物 |
+| 订单表 | 订单编号 | → | 退货表 | 订单编号 | **1:N** | 一个订单有多次退货 |
+| 订单明细表 | 明细编号 | → | 退货表 | 订单明细编号 | **1:N** | 一个明细可能分多次退货 |
+| 产品表 | 产品编号 | → | 退货表 | 产品编号 | **1:N** | 一个产品被多次退货 |
+| 产品规格表 | 规格编号 | → | 退货表 | 规格编号 | **1:N** | 一个规格被多次退货 |
 
 ### 采购管理模块
 
 | 主表 | 字段 | 方向 | 从表 | 字段 | 关系 | 语义 |
 |------|------|:----:|------|------|:----:|------|
-| Suppliers | SupplierId | → | PurchaseOrders | SupplierId | **1:N** | 一个供应商有多张采购单 |
-| Warehouses | WarehouseId | → | PurchaseOrders | WarehouseId | **1:N** | 一个仓库接收多张采购单 |
-| Employees | EmpId | → | PurchaseOrders | EmpId | **1:N** | 一个采购员负责多张采购单 |
-| PurchaseOrders | POId | → | PurchaseOrderItems | POId | **1:N** | 一张采购单有多个明细 |
-| Products | ProductId | → | PurchaseOrderItems | ProductId | **1:N** | 一个产品出现在多张采购明细中 |
-| ProductSpecs | SpecId | → | PurchaseOrderItems | SpecId | **1:N** | 一个规格出现在多张采购明细中 |
+| 供应商表 | 供应商编号 | → | 采购订单表 | 供应商编号 | **1:N** | 一个供应商有多张采购单 |
+| 仓库表 | 仓库编号 | → | 采购订单表 | 仓库编号 | **1:N** | 一个仓库接收多张采购单 |
+| 员工表 | 员工编号 | → | 采购订单表 | 采购员编号 | **1:N** | 一个采购员负责多张采购单 |
+| 采购订单表 | 采购单编号 | → | 采购订单明细表 | 采购单编号 | **1:N** | 一张采购单有多个明细 |
+| 产品表 | 产品编号 | → | 采购订单明细表 | 产品编号 | **1:N** | 一个产品出现在多张采购明细中 |
+| 产品规格表 | 规格编号 | → | 采购订单明细表 | 规格编号 | **1:N** | 一个规格出现在多张采购明细中 |
 
 ---
 
 ## 十、表清单总览
 
-| 编号 | 表名 | 中文字段 | 所属模块 |
-|:----:|------|----------|----------|
-| 1 | Departments | 部门编号、部门名称、经理编号、描述、创建时间 | 组织权限 |
-| 2 | Employees | 员工编号、部门编号、工号、姓名、密码、电话、邮箱、入职日期、是否在职、创建时间 | 组织权限 |
-| 3 | Roles | 角色编号、角色名称、描述、创建时间 | 组织权限 |
-| 4 | EmployeeRoles | 编号、员工编号、角色编号 | 组织权限 |
-| 5 | Categories | 分类编号、父分类编号、分类名称、描述、排序、创建时间 | 产品管理 |
-| 6 | Suppliers | 供应商编号、供应商编码、公司名称、联系人、联系电话、地址、邮箱、是否启用、创建时间 | 产品管理 |
-| 7 | Products | 产品编号、分类编号、供应商编号、产品编码、产品名称、售价、成本价、单位、描述、是否上架、创建时间 | 产品管理 |
-| 8 | ProductSpecs | 规格编号、产品编号、规格名称、库存数量、附加价格、创建时间 | 产品管理 |
-| 9 | ProductImages | 图片编号、产品编号、图片地址、排序、是否主图、创建时间 | 产品管理 |
-| 10 | Warehouses | 仓库编号、仓库编码、仓库名称、位置、管理员编号、是否启用、创建时间 | 仓储库存 |
-| 11 | Inventory | 库存编号、产品编号、仓库编号、当前数量、最低库存、最高库存、最后更新 | 仓储库存 |
-| 12 | StockTransactions | 流水编号、产品编号、仓库编号、类型、数量、关联订单、关联采购单、结余、操作人、操作时间、备注 | 仓储库存 |
-| 13 | Customers | 客户编号、用户名、密码、真实姓名、电话、邮箱、是否激活、注册时间、最后登录 | 客户购物 |
-| 14 | CustomerAddresses | 地址编号、客户编号、收件人、联系电话、省份、城市、区县、详细地址、是否默认、创建时间 | 客户购物 |
-| 15 | ShoppingCart | 购物车编号、用户编号、商品编号、规格编号、购买数量、是否选中、加入时间 | 客户购物 |
-| 16 | Orders | 订单编号、订单号、客户编号、员工编号、订单日期、订购总额、支付方式、确认标志、地址、邮箱、备注、状态、创建时间 | 订单售后 |
-| 17 | OrderItems | 明细编号、订单编号、产品编号、规格编号、数量、单价、小计、创建时间 | 订单售后 |
-| 18 | Payments | 支付编号、订单编号、支付单号、支付方式、支付金额、支付时间、状态、备注 | 订单售后 |
-| 19 | Shipments | 发货编号、订单编号、物流单号、物流公司、仓库编号、发货日期、签收日期、状态、备注 | 订单售后 |
-| 20 | Returns | 退货编号、订单编号、订单明细编号、产品编号、规格编号、退货数量、退货原因、退货日期、状态、备注 | 订单售后 |
-| 21 | PurchaseOrders | 采购单编号、采购单号、供应商编号、仓库编号、采购员编号、采购总额、状态、下单日期、预计到货、创建时间 | 采购管理 |
-| 22 | PurchaseOrderItems | 明细编号、采购单编号、产品编号、规格编号、数量、单价、小计、创建时间 | 采购管理 |
-| 23 | OperationLogs | 日志编号、操作者类型、操作者编号、操作类型、操作表名、记录编号、操作详情、操作时间 | 日志审计 |
+| 编号 | 表名 | 字段 | 所属模块 |
+|:----:|------|------|----------|
+| 1 | 部门表 | 部门编号、部门名称、经理编号、描述、创建时间 | 组织权限 |
+| 2 | 员工表 | 员工编号、部门编号、工号、姓名、密码、电话、邮箱、入职日期、是否在职、创建时间 | 组织权限 |
+| 3 | 角色表 | 角色编号、角色名称、描述、创建时间 | 组织权限 |
+| 4 | 员工角色表 | 编号、员工编号、角色编号 | 组织权限 |
+| 5 | 分类表 | 分类编号、父分类编号、分类名称、描述、排序、创建时间 | 产品管理 |
+| 6 | 供应商表 | 供应商编号、供应商编码、公司名称、联系人、联系电话、地址、邮箱、是否启用、创建时间 | 产品管理 |
+| 7 | 产品表 | 产品编号、分类编号、供应商编号、产品编码、产品名称、售价、成本价、计量单位、描述、是否上架、创建时间 | 产品管理 |
+| 8 | 产品规格表 | 规格编号、产品编号、规格名称、库存数量、附加价格、创建时间 | 产品管理 |
+| 9 | 产品图片表 | 图片编号、产品编号、图片地址、排序、是否主图、创建时间 | 产品管理 |
+| 10 | 仓库表 | 仓库编号、仓库编码、仓库名称、位置、管理员编号、是否启用、创建时间 | 仓储库存 |
+| 11 | 库存表 | 库存编号、产品编号、仓库编号、当前数量、最低库存、最高库存、最后更新 | 仓储库存 |
+| 12 | 库存流水表 | 流水编号、产品编号、仓库编号、类型、数量、关联订单编号、关联采购单编号、结余、操作人编号、操作时间、备注 | 仓储库存 |
+| 13 | 客户表 | 客户编号、用户名、密码、真实姓名、电话、邮箱、是否激活、注册时间、最后登录 | 客户购物 |
+| 14 | 客户地址表 | 地址编号、客户编号、收件人、联系电话、省份、城市、区县、详细地址、是否默认、创建时间 | 客户购物 |
+| 15 | 购物车表 | 购物车编号、用户编号、商品编号、规格编号、购买数量、是否选中、加入时间 | 客户购物 |
+| 16 | 订单表 | 订单编号、订单号、客户编号、员工编号、订单日期、订购总额、支付方式、确认标志、收货地址、邮箱地址、备注、订单状态、创建时间 | 订单售后 |
+| 17 | 订单明细表 | 明细编号、订单编号、产品编号、规格编号、数量、单价、小计、创建时间 | 订单售后 |
+| 18 | 支付记录表 | 支付编号、订单编号、支付单号、支付方式、支付金额、支付时间、状态、备注 | 订单售后 |
+| 19 | 物流发货表 | 发货编号、订单编号、物流单号、物流公司、仓库编号、发货日期、签收日期、状态、备注 | 订单售后 |
+| 20 | 退货表 | 退货编号、订单编号、订单明细编号、产品编号、规格编号、退货数量、退货原因、退货日期、状态、备注 | 订单售后 |
+| 21 | 采购订单表 | 采购单编号、采购单号、供应商编号、仓库编号、采购员编号、采购总额、状态、下单日期、预计到货、创建时间 | 采购管理 |
+| 22 | 采购订单明细表 | 明细编号、采购单编号、产品编号、规格编号、采购数量、单价、小计、创建时间 | 采购管理 |
+| 23 | 操作日志表 | 日志编号、操作者类型、操作者编号、操作类型、操作表名、记录编号、操作详情、操作时间 | 日志审计 |
