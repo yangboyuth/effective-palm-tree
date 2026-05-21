@@ -1,6 +1,6 @@
 # 淘宝商城数据库 ER 图
 
-## 整体 ER 图
+## 整体 ER 图（25张表）
 
 ```mermaid
 erDiagram
@@ -57,47 +57,6 @@ erDiagram
 
 ```mermaid
 erDiagram
-    用户表 {
-        INT 用户编号 PK
-        VARCHAR 用户名
-        VARCHAR 密码密文
-        VARCHAR 手机号
-        VARCHAR 邮箱
-        VARCHAR 头像URL
-        TINYINT 用户角色
-        TINYINT 账户状态
-        DATETIME 注册时间
-        DATETIME 最后登录时间
-    }
-    用户详情表 {
-        INT 用户编号 PK_FK
-        VARCHAR 真实姓名
-        TINYINT 性别
-        DATE 出生日期
-        VARCHAR 昵称
-        VARCHAR 个人简介
-        VARCHAR 身份证号脱敏
-        DATETIME 更新时间
-    }
-    收货地址表 {
-        INT 地址编号 PK
-        INT 用户编号 FK
-        VARCHAR 收货人姓名
-        VARCHAR 联系电话
-        VARCHAR 省份
-        VARCHAR 城市
-        VARCHAR 区县
-        VARCHAR 详细地址
-        VARCHAR 邮政编码
-        TINYINT 是否默认地址
-        DATETIME 创建时间
-    }
-    商品收藏表 {
-        INT 收藏编号 PK
-        INT 用户编号 FK
-        INT 商品编号 FK
-        DATETIME 收藏时间
-    }
     用户表 ||--|| 用户详情表 : "用户编号"
     用户表 ||--o{ 收货地址表 : "用户编号"
     用户表 ||--o{ 商品收藏表 : "用户编号"
@@ -107,79 +66,6 @@ erDiagram
 
 ```mermaid
 erDiagram
-    商品分类表 {
-        INT 分类编号 PK
-        VARCHAR 分类名称
-        INT 父级分类编号 FK
-        TINYINT 分类层级
-        INT 排序序号
-        TINYINT 是否叶子节点
-        VARCHAR 图标URL
-        DATETIME 创建时间
-    }
-    品牌表 {
-        INT 品牌编号 PK
-        VARCHAR 品牌名称
-        VARCHAR 品牌LOGO_URL
-        CHAR 品牌首字母
-        VARCHAR 所属国家
-        TEXT 品牌故事简介
-        TINYINT 状态
-        DATETIME 创建时间
-    }
-    商品表 {
-        INT 商品编号 PK
-        INT 卖家编号 FK
-        INT 分类编号 FK
-        INT 品牌编号 FK
-        VARCHAR 商品标题
-        VARCHAR 副标题
-        VARCHAR 主图URL
-        DECIMAL 最低价格
-        DECIMAL 最高价格
-        INT 总库存量
-        INT 销量
-        TINYINT 商品状态
-        TINYINT 是否新品
-        DATETIME 创建时间
-        DATETIME 更新时间
-    }
-    商品描述表 {
-        INT 描述编号 PK
-        INT 商品编号 UK_FK
-        LONGTEXT PC端描述HTML
-        LONGTEXT 移动端描述HTML
-        TEXT 售后服务说明
-        VARCHAR 包装清单
-        DATETIME 更新时间
-    }
-    商品图片表 {
-        INT 图片编号 PK
-        INT 商品编号 FK
-        VARCHAR 图片URL
-        INT 排序序号
-        TINYINT 是否主图
-        DATETIME 上传时间
-    }
-    商品规格表 {
-        INT 规格编号 PK
-        INT 商品编号 FK
-        VARCHAR 规格名称
-        VARCHAR 规格值
-        DECIMAL 销售价格
-        INT 库存数量
-        VARCHAR 规格编码
-        TINYINT 是否启用
-        DATETIME 创建时间
-    }
-    商品参数表 {
-        INT 参数编号 PK
-        INT 商品编号 FK
-        VARCHAR 属性名称
-        VARCHAR 属性值
-        INT 排序序号
-        DATETIME 创建时间
-    }
     商品分类表 ||--o{ 商品分类表 : "父级分类编号"
     商品分类表 ||--o{ 商品表 : "分类编号"
     品牌表 ||--o{ 商品表 : "品牌编号"
@@ -194,95 +80,8 @@ erDiagram
 
 ```mermaid
 erDiagram
-    购物车表 {
-        INT 购物车编号 PK
-        INT 用户编号 FK
-        INT 商品编号 FK
-        INT 规格编号 FK
-        INT 购买数量
-        TINYINT 是否选中
-        DATETIME 加入时间
-    }
-    订单表 {
-        INT 订单编号 PK
-        VARCHAR 订单流水号
-        INT 用户编号 FK
-        INT 收货地址编号 FK
-        DECIMAL 商品总金额
-        DECIMAL 运费金额
-        DECIMAL 实付金额
-        TINYINT 订单状态
-        VARCHAR 买家留言
-        DATETIME 支付时间
-        DATETIME 发货时间
-        DATETIME 完成时间
-        VARCHAR 取消原因
-        DATETIME 创建时间
-        DATETIME 更新时间
-    }
-    订单明细表 {
-        INT 明细编号 PK
-        INT 订单编号 FK
-        INT 商品编号 FK
-        INT 规格编号 FK
-        VARCHAR 商品标题快照
-        VARCHAR 规格名称快照
-        DECIMAL 成交单价快照
-        INT 购买数量
-        DECIMAL 小计金额
-        VARCHAR 商品图片快照
-        TINYINT 是否已评价
-    }
-    订单状态日志表 {
-        INT 日志编号 PK
-        INT 订单编号 FK
-        TINYINT 变更前状态
-        TINYINT 变更后状态
-        TINYINT 操作人类型
-        INT 操作人编号
-        VARCHAR 备注说明
-        DATETIME 操作时间
-    }
-    支付记录表 {
-        INT 支付编号 PK
-        INT 订单编号 UK_FK
-        VARCHAR 支付流水号
-        DECIMAL 支付金额
-        TINYINT 支付方式
-        TINYINT 支付状态
-        VARCHAR 第三方交易号
-        DATETIME 支付时间
-        DATETIME 创建时间
-    }
-    退款记录表 {
-        INT 退款编号 PK
-        INT 订单编号 FK
-        DECIMAL 退款金额
-        VARCHAR 退款原因
-        TEXT 退款说明
-        TEXT 凭证图片
-        TINYINT 退款状态
-        VARCHAR 商家拒绝原因
-        DATETIME 申请时间
-        DATETIME 处理时间
-        DATETIME 完成时间
-    }
-    商品评价表 {
-        INT 评价编号 PK
-        INT 订单编号 FK
-        INT 商品编号 FK
-        INT 用户编号 FK
-        TINYINT 评分
-        TEXT 评价内容
-        TEXT 晒图图片
-        VARCHAR 商家回复内容
-        TINYINT 是否匿名评价
-        INT 有用计数
-        DATETIME 回复时间
-        DATETIME 评价时间
-    }
     用户表 ||--o{ 购物车表 : "用户编号"
-    用户表 ||--o{ 订单表 : "用户编号(买家)"
+    用户表 ||--o{ 订单表 : "用户编号"
     用户表 ||--o{ 商品评价表 : "用户编号"
     收货地址表 ||--o{ 订单表 : "收货地址编号"
     商品表 ||--o{ 购物车表 : "商品编号"
@@ -300,51 +99,6 @@ erDiagram
 
 ```mermaid
 erDiagram
-    优惠券表 {
-        INT 优惠券编号 PK
-        VARCHAR 优惠券名称
-        TINYINT 优惠券类型
-        DECIMAL 使用门槛金额
-        DECIMAL 减免金额或折扣率
-        INT 发放总量
-        INT 已领取量
-        INT 已使用量
-        INT 每人限领数量
-        DATETIME 有效期起始时间
-        DATETIME 有效期结束时间
-        TINYINT 优惠券状态
-        DATETIME 创建时间
-    }
-    用户优惠券表 {
-        INT 记录编号 PK
-        INT 用户编号 FK
-        INT 优惠券编号 FK
-        TINYINT 优惠券状态
-        INT 使用的订单编号 FK
-        DATETIME 领取时间
-        DATETIME 使用时间
-    }
-    促销活动表 {
-        INT 活动编号 PK
-        VARCHAR 活动名称
-        TINYINT 活动类型
-        VARCHAR 活动描述
-        DATETIME 活动起始时间
-        DATETIME 活动结束时间
-        TEXT 活动规则JSON
-        TINYINT 活动状态
-        DATETIME 创建时间
-    }
-    活动商品表 {
-        INT 记录编号 PK
-        INT 活动编号 FK
-        INT 商品编号 FK
-        DECIMAL 活动价格
-        INT 每人限购数量
-        INT 活动库存
-        INT 已售数量
-        DATETIME 创建时间
-    }
     用户表 ||--o{ 用户优惠券表 : "用户编号"
     优惠券表 ||--o{ 用户优惠券表 : "优惠券编号"
     订单表 ||--o{ 用户优惠券表 : "使用的订单编号"
@@ -356,44 +110,64 @@ erDiagram
 
 ```mermaid
 erDiagram
-    快递公司表 {
-        INT 快递公司编号 PK
-        VARCHAR 快递公司名称
-        VARCHAR 快递公司代码
-        VARCHAR 客服电话
-        VARCHAR 官网URL
-        INT 排序序号
-        TINYINT 是否启用
-    }
-    发货记录表 {
-        INT 发货编号 PK
-        INT 订单编号 UK_FK
-        INT 快递公司编号 FK
-        VARCHAR 快递单号
-        VARCHAR 发货人姓名
-        VARCHAR 发货人电话
-        VARCHAR 发货地址
-        VARCHAR 收货人姓名
-        VARCHAR 收货人电话
-        VARCHAR 收货地址
-        DECIMAL 运费金额
-        TINYINT 发货状态
-        DATETIME 发货时间
-        DATETIME 签收时间
-        DATETIME 创建时间
-    }
-    物流轨迹表 {
-        INT 轨迹编号 PK
-        INT 发货编号 FK
-        VARCHAR 轨迹描述
-        VARCHAR 轨迹状态
-        VARCHAR 所在城市
-        DATETIME 操作时间
-    }
     订单表 ||--|| 发货记录表 : "订单编号"
     快递公司表 ||--o{ 发货记录表 : "快递公司编号"
     发货记录表 ||--o{ 物流轨迹表 : "发货编号"
 ```
+
+---
+
+## 各表字段清单
+
+### 用户模块
+
+| 表名 | 主键 | 核心字段 |
+|------|------|----------|
+| 用户表 | 用户编号(PK) | 用户名、密码密文、手机号、邮箱、头像URL、用户角色、账户状态、注册时间、最后登录时间 |
+| 用户详情表 | 用户编号(PK,FK) | 真实姓名、性别、出生日期、昵称、个人简介、身份证号脱敏、更新时间 |
+| 收货地址表 | 地址编号(PK) | 用户编号(FK)、收货人姓名、联系电话、省份、城市、区县、详细地址、邮政编码、是否默认地址、创建时间 |
+| 商品收藏表 | 收藏编号(PK) | 用户编号(FK)、商品编号(FK)、收藏时间 |
+
+### 商品模块
+
+| 表名 | 主键 | 核心字段 |
+|------|------|----------|
+| 商品分类表 | 分类编号(PK) | 分类名称、父级分类编号(FK)、分类层级、排序序号、是否叶子节点、图标URL、创建时间 |
+| 品牌表 | 品牌编号(PK) | 品牌名称、品牌LOGO_URL、品牌首字母、所属国家、品牌故事简介、状态、创建时间 |
+| 商品表 | 商品编号(PK) | 卖家编号(FK)、分类编号(FK)、品牌编号(FK)、商品标题、副标题、主图URL、最低价格、最高价格、总库存量、销量、商品状态、是否新品、创建时间、更新时间 |
+| 商品描述表 | 描述编号(PK) | 商品编号(UK,FK)、PC端描述HTML、移动端描述HTML、售后服务说明、包装清单、更新时间 |
+| 商品图片表 | 图片编号(PK) | 商品编号(FK)、图片URL、排序序号、是否主图、上传时间 |
+| 商品规格表 | 规格编号(PK) | 商品编号(FK)、规格名称、规格值、销售价格、库存数量、规格编码、是否启用、创建时间 |
+| 商品参数表 | 参数编号(PK) | 商品编号(FK)、属性名称、属性值、排序序号、创建时间 |
+
+### 订单模块
+
+| 表名 | 主键 | 核心字段 |
+|------|------|----------|
+| 购物车表 | 购物车编号(PK) | 用户编号(FK)、商品编号(FK)、规格编号(FK)、购买数量、是否选中、加入时间 |
+| 订单表 | 订单编号(PK) | 订单流水号(UK)、用户编号(FK)、收货地址编号(FK)、商品总金额、运费金额、实付金额、订单状态、买家留言、支付时间、发货时间、完成时间、取消原因、创建时间、更新时间 |
+| 订单明细表 | 明细编号(PK) | 订单编号(FK)、商品编号(FK)、规格编号(FK)、商品标题快照、规格名称快照、成交单价快照、购买数量、小计金额、商品图片快照、是否已评价 |
+| 订单状态日志表 | 日志编号(PK) | 订单编号(FK)、变更前状态、变更后状态、操作人类型、操作人编号、备注说明、操作时间 |
+| 支付记录表 | 支付编号(PK) | 订单编号(UK,FK)、支付流水号(UK)、支付金额、支付方式、支付状态、第三方交易号、支付时间、创建时间 |
+| 退款记录表 | 退款编号(PK) | 订单编号(FK)、退款金额、退款原因、退款说明、凭证图片、退款状态、商家拒绝原因、申请时间、处理时间、完成时间 |
+| 商品评价表 | 评价编号(PK) | 订单编号(FK)、商品编号(FK)、用户编号(FK)、评分、评价内容、晒图图片、商家回复内容、是否匿名评价、有用计数、回复时间、评价时间 |
+
+### 营销模块
+
+| 表名 | 主键 | 核心字段 |
+|------|------|----------|
+| 优惠券表 | 优惠券编号(PK) | 优惠券名称、优惠券类型、使用门槛金额、减免金额或折扣率、发放总量、已领取量、已使用量、每人限领数量、有效期起始时间、有效期结束时间、优惠券状态、创建时间 |
+| 用户优惠券表 | 记录编号(PK) | 用户编号(FK)、优惠券编号(FK)、优惠券状态、使用的订单编号(FK)、领取时间、使用时间 |
+| 促销活动表 | 活动编号(PK) | 活动名称、活动类型、活动描述、活动起始时间、活动结束时间、活动规则JSON、活动状态、创建时间 |
+| 活动商品表 | 记录编号(PK) | 活动编号(FK)、商品编号(FK)、活动价格、每人限购数量、活动库存、已售数量、创建时间 |
+
+### 物流模块
+
+| 表名 | 主键 | 核心字段 |
+|------|------|----------|
+| 快递公司表 | 快递公司编号(PK) | 快递公司名称(UK)、快递公司代码(UK)、客服电话、官网URL、排序序号、是否启用 |
+| 发货记录表 | 发货编号(PK) | 订单编号(UK,FK)、快递公司编号(FK)、快递单号、发货人姓名、发货人电话、发货地址、收货人姓名、收货人电话、收货地址、运费金额、发货状态、发货时间、签收时间、创建时间 |
+| 物流轨迹表 | 轨迹编号(PK) | 发货编号(FK)、轨迹描述、轨迹状态、所在城市、操作时间 |
 
 ---
 
@@ -438,10 +212,10 @@ erDiagram
 
 ---
 
-## 表汇总（25张）
+## 表汇总
 
-| 模块 | 表名 | 主键 | 行数 |
-|------|------|------|------|
+| 模块 | 表名 | 主键 | 测试数据行数 |
+|------|------|------|-------------|
 | 用户 | 用户表 | 用户编号 | 8 |
 | 用户 | 用户详情表 | 用户编号 | 8 |
 | 用户 | 收货地址表 | 地址编号 | 15 |
@@ -467,4 +241,4 @@ erDiagram
 | 物流 | 快递公司表 | 快递公司编号 | 5 |
 | 物流 | 发货记录表 | 发货编号 | 4 |
 | 物流 | 物流轨迹表 | 轨迹编号 | 12 |
-| | | **总计数据** | **281 条** |
+| **合计** | **25 张表** | | **281 条** |
